@@ -76,7 +76,7 @@ def draw_Scatter(X, Y):
     plt.close()
 
 
-def draw_DecisionBoundary(X, Y, model):
+def draw_DecisionBoundary(X, Y, model, size=6):
 
     # Najdeme hranice, pre ktore budeme skumat predikciu
     pad = 0.5
@@ -100,7 +100,7 @@ def draw_DecisionBoundary(X, Y, model):
     YHat = YHat.reshape(x1_Grid.shape)
 
     # Najskor nakreslime contour graf - vysledky skumania pre mriezku
-    plt.figure(figsize=(9, 9))
+    plt.figure(figsize=(size, size))
     plt.xscale('linear')
     plt.yscale('linear')
     plt.contourf(x1_Grid, x2_Grid, YHat, cmap=plt.cm.RdYlBu)
@@ -147,10 +147,10 @@ def MakeBatches(dataset, batchSize):
 
     return result
 
-def draw_TrainingResults(results):
+def draw_TrainingResults(results, size=6):
 
     # Inicializacia - logaritmicka mierka na Y osi
-    plt.figure(figsize=(9, 9))
+    plt.figure(figsize=(size, size*3/4))
     plt.xlabel('Epoch')
     plt.xscale('linear')
     plt.yscale('log')

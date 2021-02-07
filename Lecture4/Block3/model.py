@@ -7,6 +7,7 @@
 #------------------------------------------------------------------------------
 import numpy as np
 
+from utils import MakeBatches
 
 #------------------------------------------------------------------------------
 #   Model class
@@ -80,7 +81,7 @@ class Model:
 
         return loss
 
-    def train(self, X, Y, epochs, batchSize, devX=None, devY=None):
+    def train(self, X, Y, epochs, batchSize, devX=None, devY=None, verboseInterval=1000):
 
         # 3. Ucenie - budeme vykonavat iteracie (epochy) cez nasu trenovaciu mnozinu.
 
@@ -120,13 +121,22 @@ class Model:
                 results["val_loss"].append((1.0 / devm) * np.sum(valLoss))       # Aj toto je Cost J !
         
             # A este raz za 1000 epoch napiseme aktualny stav
-            if (epoch % 1000 == 0):
+            if (epoch % verboseInterval == 0):
                 if (doValidation):
                     print('Epoch {0}:  Loss = {1:.7f}   Val_Loss = {2:.7f}'.format(
                         epoch, results["loss"][epoch], results["val_loss"][epoch])
                     )
                 else:
                     print('Epoch {0}:  Loss = {1:.7f}'.format(epoch, results["loss"][epoch]))
+
+        # Final
+        print('Training complete.')
+        if (doValidation):
+            print('Epoch {0}:  Loss = {1:.7f}   Val_Loss = {2:.7f}'.format(
+                epoch, results["loss"][epoch], results["val_loss"][epoch])
+            )
+        else:
+            print('Epoch {0}:  Loss = {1:.7f}'.format(epoch, results["loss"][epoch]))
 
         return results
 
