@@ -112,3 +112,37 @@ def draw_DecisionBoundary(X, Y, model):
     plt.close()
 
 
+def MakeBatches(dataset, batchSize):
+    # Set obsahuje 2 mnoziny - X, Y
+    X, Y = dataset
+
+    # Zistime celkovy pocet vzoriek
+    nx, m = X.shape
+    ny, _ = Y.shape
+
+    # Vysledny zoznam
+    result = []
+
+    # Ak je batchSize = 0, berieme celu mnozinu
+    if (batchSize <= 0):
+        batchSize = m
+
+    # Celkovy pocet davok sa zaokruhluje nahor
+    steps = int(np.ceil(m / batchSize))
+    for i in range(steps):
+
+        # Spocitame hranice rezu
+        mStart = i * batchSize
+        mEnd = min(mStart + batchSize, m)
+
+        # Vyberame data pre aktualny rez - chceme dodrzat rank
+        minibatchX = X[:,mStart:mEnd]
+        minibatchY = Y[:,mStart:mEnd]
+
+        assert(len(minibatchX.shape) == 2)
+        assert(len(minibatchY.shape) == 2)
+
+        # Pridame novu dvojicu do vysledneho zoznamu
+        result.append((minibatchX, minibatchY))
+
+    return result
