@@ -27,9 +27,11 @@ class LossFunction:
 #------------------------------------------------------------------------------
 class BinaryCrossEntropyLossFunction(LossFunction):
     def __call__(self, a, y):
+        a = np.clip(a, 1e-7, 1.0-1e-7)      # numerical stability !
         return -( np.multiply(y, np.log(a)) + np.multiply((1-y), np.log(1-a)) )
 
     def derivative(self, a, y):
+        a = np.clip(a, 1e-7, 1.0-1e-7)      # numerical stability !
         return -np.divide(y, a) + np.divide((1-y), (1-a))
 
 
