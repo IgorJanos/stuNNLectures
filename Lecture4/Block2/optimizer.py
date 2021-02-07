@@ -41,5 +41,5 @@ class GradientDescent(Optimizer):
 
         # Jeden krok zostupu
         W = W - self.learningRate*dW
-        b = b - self.reatningRate*db
+        b = b - self.learningRate*db
         return W, b
