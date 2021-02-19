@@ -7,7 +7,7 @@
 #------------------------------------------------------------------------------
 import numpy as np
 
-from utils import MakeBatches
+from backstage.utils import MakeBatches
 
 #------------------------------------------------------------------------------
 #   Model class

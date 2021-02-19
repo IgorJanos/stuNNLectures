@@ -7,7 +7,7 @@
 #------------------------------------------------------------------------------
 import numpy as np
 
-from activation import CreateActivationFunction
+from backstage.activation import CreateActivationFunction
 
 
 #------------------------------------------------------------------------------
