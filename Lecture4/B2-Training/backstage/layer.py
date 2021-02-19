@@ -134,7 +134,7 @@ class Dense(Layer):
 #------------------------------------------------------------------------------
 class DropOut(Layer):
     def __init__(self, dropRate=0.5):
-        super().__ini__(act='linear')
+        super().__init__(act='linear')
 
         # Inverted dropout znamena, ze pracujeme s 
         #    keepProb - pravdepodobnostou ponechania neuronov
@@ -150,7 +150,7 @@ class DropOut(Layer):
         if (isTraining):
             # Drop masku vzdy pri kazdom prechode a aplikujeme korekciu skalovania
             mask = (np.random.rand(*x.shape) < self.keepProb)
-            mask = dropMask / self.keepProb
+            mask = mask / self.keepProb
 
             # Masku budeme potrebovat pri spatnom prechode
             return x*mask, mask
