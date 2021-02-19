@@ -33,7 +33,7 @@ class Model:
         # 2. Priamy prechod - predikcia
         a = x
         for l in self.layers:
-            a, _ = l.forward(a)
+            a, _ = l.forward(a, False)      # Neucime !
         return a
 
     def __call__(self, x):
@@ -60,7 +60,8 @@ class Model:
         a = x
         forwardCache = []
         for l in self.layers:
-            aNext, layerCache = l.forward(a)
+            aNext, layerCache = l.forward(a, True)      # isTraining = True
+            
             # Odkladame si (Vrstvu, cache data z vrstvy - (W, b, z), a aktivaciu z predchadzajucej vrstvy)
             forwardCache.append((l, layerCache, a))
             a = aNext

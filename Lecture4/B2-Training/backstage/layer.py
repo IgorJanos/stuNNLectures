@@ -25,7 +25,7 @@ class Layer:
         #    Mame pristup k predchadzajucej vrstve, aby sme vedeli zistit jej shape
         pass
 
-    def forward(self, x):
+    def forward(self, x, isTraining):
         # 2. Priamy prechod
         #    Na vstupe mame aktivaciu predchadzajucej vrstvy
         #    Vystupom je aktivacia a cache
@@ -60,7 +60,7 @@ class Input(Layer):
     def initialize(self, prevLayer):
         self.shape = (self.nx, 1)
 
-    def forward(self, x):
+    def forward(self, x, isTraining):
         return x, None
 
     def backward(self, da, aPrev, cache, optimizer):
@@ -94,7 +94,7 @@ class Dense(Layer):
         self.W = np.random.randn(nx, pnx)
         self.b = np.zeros((nx, 1), dtype=float)
 
-    def forward(self, x):
+    def forward(self, x, isTraining):
         # 2. Priamy prechod
         z = np.matmul(self.W, x) + self.b     # z = Wx + b
         a = self.activation(z)                # a = activation(z)
@@ -129,3 +129,40 @@ class Dense(Layer):
         self.W, self.b = optimizer.update(self.optimizerContext, self.W, self.b)
 
 
+#------------------------------------------------------------------------------
+#   DropOut class
+#------------------------------------------------------------------------------
+class DropOut(Layer):
+    def __init__(self, dropRate=0.5):
+        super().__ini__(act='linear')
+
+        # Inverted dropout znamena, ze pracujeme s 
+        #    keepProb - pravdepodobnostou ponechania neuronov
+        self.keepProb = 1.0 - dropRate
+
+    def initialize(self, prevLayer):
+
+        # Pouzivame tvar predchadzajucej vrstvy
+        self.shape = prevLayer.shape
+
+
+    def forward(self, x, isTraining):
+        if (isTraining):
+            # Drop masku vzdy pri kazdom prechode a aplikujeme korekciu skalovania
+            mask = (np.random.rand(*x.shape) < self.keepProb)
+            mask = dropMask / self.keepProb
+
+            # Masku budeme potrebovat pri spatnom prechode
+            return x*mask, mask
+
+        # Pocas predikcie vratime priamo x
+        return x, None
+
+    def backward(self, da, aPrev, cache, optimizer):
+
+        # Masku sme nacachovali pri priamom prechode
+        mask = cache
+
+        # Gradient sirime iba pre aktivne neurony z priameho prechodu
+        daPrev = da * mask
+        return daPrev
