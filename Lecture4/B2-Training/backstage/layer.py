@@ -8,6 +8,7 @@
 import numpy as np
 
 from backstage.activation import CreateActivationFunction
+from backstage.initializer import Normal
 
 
 #------------------------------------------------------------------------------
@@ -71,12 +72,13 @@ class Input(Layer):
 #   Dense class
 #------------------------------------------------------------------------------
 class Dense(Layer):
-    def __init__(self, nunits, act='linear'):
+    def __init__(self, nunits, act='linear', weightsInitializer=Normal()):
         super().__init__(act)        
-        self.nunits = nunits             # Pocet neuronov vrstvy
-        self.W = None                    # Maticu vah zatial nemame
-        self.b = None                    # Bias zatial nemame
-        self.optimizerContext = None     # Kontext zatial nemame
+        self.nunits = nunits                            # Pocet neuronov vrstvy
+        self.W = None                                   # Maticu vah zatial nemame
+        self.b = None                                   # Bias zatial nemame
+        self.optimizerContext = None                    # Kontext zatial nemame
+        self.weightsInitializer = weightsInitializer    # Odlozime inicializer
 
     def initialize(self, prevLayer):
         # 1. Inicializacia
@@ -90,8 +92,8 @@ class Dense(Layer):
         pnx, _ = prevLayer.shape
         nx, _ = self.shape
 
-        # Inicializujeme vahy a bias
-        self.W = np.random.randn(nx, pnx)
+        # Inicializujeme vahy a bias. Pouzijeme inicializator vah z konstruktoru
+        self.W = self.weightsInitializer(pnx, nx)
         self.b = np.zeros((nx, 1), dtype=float)
 
     def forward(self, x, isTraining):
