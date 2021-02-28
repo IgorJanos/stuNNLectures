@@ -66,7 +66,7 @@ def dataset_Flower(m=10, noise=0.0):
 def draw_Scatter(X, Y):
 
     # 9 x 9 palcovy obrazok s linearnou mierkou
-    plt.figure(figsize=(9, 9))
+    plt.figure(figsize=(6, 6))
     plt.xscale('linear')
     plt.yscale('linear')
 
@@ -100,7 +100,7 @@ def draw_DecisionBoundary(X, Y, model):
     YHat = YHat.reshape(x1_Grid.shape)
 
     # Najskor nakreslime contour graf - vysledky skumania pre mriezku
-    plt.figure(figsize=(9, 9))
+    plt.figure(figsize=(6, 6))
     plt.xscale('linear')
     plt.yscale('linear')
     plt.contourf(x1_Grid, x2_Grid, YHat, cmap=plt.cm.RdYlBu)
